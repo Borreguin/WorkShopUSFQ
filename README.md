@@ -1,9 +1,12 @@
 # WorkShop1-USFQ
 ## Taller 1 de inteligencia artificial
 
-- **Nombre del grupo**: xxxxxx
+- **Nombre del grupo**: Grupo 4
 - **Integrantes del grupo**:
-  * Estudiante 1
-  * Estudiante 2
+  * David Chamorro
+  * Sharon Guerra
+  * Luis Muñoz
+  * Maritza Vaca
+  
 
 - **Link**: [Planificación en ClickUp](https://app.clickup.com/xxxxxx)
