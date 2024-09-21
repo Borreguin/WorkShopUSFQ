@@ -1,9 +1,9 @@
 # WorkShop1-USFQ
 ## Taller 1 de inteligencia artificial
 
-- **Nombre del grupo**: xxxxxx
+- **Nombre del grupo**: Grupo 2
 - **Integrantes del grupo**:
-  * Estudiante 1
-  * Estudiante 2
-
+  * Estefi Batallas
+  * Guillermo Celi
+  * Francois Fernandez
 - **Link**: [Planificación en ClickUp](https://app.clickup.com/xxxxxx)
