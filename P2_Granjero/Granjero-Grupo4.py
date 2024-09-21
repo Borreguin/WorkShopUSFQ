@@ -1,3 +1,6 @@
+import plotly.graph_objs as go
+from plotly.subplots import make_subplots
+import time
 from collections import deque
 
 # Define the initial and goal states
@@ -41,14 +44,29 @@ def state_to_names(state):
     right_shore = [names[i] for i in range(4) if state[i] == 1]
     return left_shore, right_shore
 
+# Plot the current state
+def plot_state(state, step):
+    left_shore, right_shore = state_to_names(state)
+    fig = make_subplots(rows=1, cols=2, subplot_titles=("Left Shore", "Right Shore"))
+
+    fig.add_trace(go.Bar(x=left_shore, y=[1]*len(left_shore), name="Left Shore"), row=1, col=1)
+    fig.add_trace(go.Bar(x=right_shore, y=[1]*len(right_shore), name="Right Shore"), row=1, col=2)
+
+    fig.update_layout(title_text=f"Step {step}", showlegend=False)
+    fig.show()
+    time.sleep(1)
+
 # Use BFS to find the solution
 def solve_riddle():
     queue = deque([(initial_state, [])])
     visited = set()
     visited.add(initial_state)
+    step = 0
 
     while queue:
         current_state, path = queue.popleft()
+        plot_state(current_state, step)
+        step += 1
 
         if current_state == goal_state:
             return path + [current_state]
