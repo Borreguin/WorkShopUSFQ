@@ -6,4 +6,4 @@
   * Estefi Batallas
   * Guillermo Celi
   * Francois Fernandez
-- **Link**: [Planificación en ClickUp](https://app.clickup.com/xxxxxx)
+- **Link**: [Planificación en ClickUp](https://sharing.clickup.com/9011324961/t/h/8689vmh6b/0ESYIAHT3HN07DE)
