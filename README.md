@@ -11,5 +11,5 @@
     • Edgar Córdova (00342111)
 
 
-- **Link**: [https://app.clickup.com/xxxxxx)](https://app.clickup.com/9011298792/v/l/8chv0f8-291)]
+- **Link**: [https://app.clickup.com/xxxxxx)](https://app.clickup.com/9011298792/v/l/8chv0f8-291)
   
