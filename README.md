@@ -1,11 +1,14 @@
 # WorkShop1-USFQ
 ## Taller 1 de inteligencia artificial
 
-- **Nombre del grupo**: xxxxxx
+- **Nombre del grupo**: Grupo 3
 - **Integrantes del grupo**:
-  * Estudiante 1
-  * Estudiante 2
+
+    • Milene Muñoz (00341391)
+
+    • Jair Criollo (00341239)
+
+    • Edgar Córdova (00342111)
+
 
 - **Link**: [Planificación en ClickUp](https://app.clickup.com/xxxxxx)
-
-Este es un ejemplo de commit para revision
