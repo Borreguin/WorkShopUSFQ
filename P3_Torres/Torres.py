@@ -63,7 +63,7 @@ def main():
     towers = initialize_towers(n)
     plt.figure(figsize=(8, 6))
     draw_towers(towers)  # Dibujar la configuración inicial
-    TowerOfHanoi(n, 0, 1, 2, towers)  # Ejecutar el algoritmo
+    TowerOfHanoi(n, 0, 2, 1, towers)  # Ejecutar el algoritmo
     plt.show()
 
 
