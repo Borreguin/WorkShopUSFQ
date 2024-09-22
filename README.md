@@ -11,4 +11,5 @@
     • Edgar Córdova (00342111)
 
 
-- **Link**: [Planificación en ClickUp](https://app.clickup.com/xxxxxx)
+- **Link**: [https://app.clickup.com/xxxxxx)](https://app.clickup.com/9011298792/v/l/8chv0f8-291)]
+  
