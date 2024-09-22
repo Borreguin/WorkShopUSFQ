@@ -4,11 +4,11 @@
 - **Nombre del grupo**: Grupo 3
 - **Integrantes del grupo**:
 
-• Milene Muñoz (00341391)
+    • Milene Muñoz (00341391)
 
-• Jair Criollo (00341239)
+    • Jair Criollo (00341239)
 
-• Edgar Córdova (00342111)
+    • Edgar Córdova (00342111)
 
 
 - **Link**: [Planificación en ClickUp](https://app.clickup.com/xxxxxx)
