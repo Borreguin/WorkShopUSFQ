@@ -8,4 +8,5 @@
   * JORDY GARZON
   * JOSE MENDEZ
 
-- **Link**: [Planificación en ClickUp](https://app.clickup.com/xxxxxx)
+- **Link**: [Planificación en ClickUp](https://app.clickup.com/)
+- https://app.clickup.com/9011326597/v/l/8chvvm5-351
