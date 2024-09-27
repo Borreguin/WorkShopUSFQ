@@ -1,9 +1,10 @@
 import matplotlib.pyplot as plt
 import os, sys
+from collections import defaultdict
+
 project_path = os.path.dirname(__file__)
 sys.path.append(project_path)
 from Taller2.P1.P1_util import define_color
-
 
 class MazeLoader:
     def __init__(self, filename):
@@ -41,5 +42,19 @@ class MazeLoader:
         return self
 
     def get_graph(self):
-        # Implementar la creación del grafo a partir del laberinto
-        return None
+      graph = defaultdict(list)
+      height = len(self.maze)
+      width = len(self.maze[0])
+
+      for y in range(height):
+        for x in range(width):
+          if self.maze[y][x] != '#':
+            if x > 0 and self.maze[y][x - 1] != '#':
+              graph[(y, x)].append((y, x - 1))
+            if x < width - 1 and self.maze[y][x + 1] != '#':
+              graph[(y, x)].append((y, x + 1))
+            if y > 0 and self.maze[y - 1][x] != '#':
+              graph[(y, x)].append((y - 1, x))
+            if y < height - 1 and self.maze[y + 1][x] != '#':
+              graph[(y, x)].append((y + 1, x))
+      return graph
