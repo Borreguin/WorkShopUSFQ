@@ -1,6 +1,6 @@
 from typing import List
 
-from P1_TSP.util import generar_ciudades_con_distancias, plotear_ruta
+from Taller1.P1_TSP.util import generar_ciudades_con_distancias, plotear_ruta
 
 
 class TSP:
