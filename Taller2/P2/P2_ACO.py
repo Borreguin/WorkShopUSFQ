@@ -2,8 +2,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.colors import LinearSegmentedColormap
 
+np.random.seed(42)
 class AntColonyOptimization:
-    def __init__(self, start, end, obstacles, grid_size=(10, 10), num_ants=10, evaporation_rate=0.1, alpha=0.1, beta=15):
+    def __init__(self, start, end, obstacles, grid_size=(10, 10), num_ants=100, evaporation_rate=0.3, alpha=1, beta=5):
         self.start = start
         self.end = end
         self.obstacles = obstacles
@@ -31,40 +32,46 @@ class AntColonyOptimization:
         probabilities = []
         total = 0
         for neighbor in neighbors:
-            if neighbor not in visited:
-                pheromone = self.pheromones[neighbor[1], neighbor[0]]
-                heuristic = 1 / (np.linalg.norm(np.array(neighbor) - np.array(self.end)) + 0.1)
-                probabilities.append((neighbor, pheromone ** self.alpha * heuristic ** self.beta))
-                total += pheromone ** self.alpha * heuristic ** self.beta
+          if neighbor not in visited:
+            pheromone = self.pheromones[neighbor[1], neighbor[0]]
+            heuristic = 1 / (np.linalg.norm(np.array(neighbor) - np.array(self.end)) + 0.1)
+            probabilities.append((neighbor, pheromone ** self.alpha * heuristic ** self.beta))
+            total += pheromone ** self.alpha * heuristic ** self.beta
+
         if not probabilities:
-            return None
+            return None  # No hay vecinos válidos, se retorna None para evitar el error
+
         probabilities = [(pos, prob / total) for pos, prob in probabilities]
         selected = np.random.choice(len(probabilities), p=[prob for pos, prob in probabilities])
         return probabilities[selected][0]
+
 
     def _evaporate_pheromones(self):
         self.pheromones *= (1 - self.evaporation_rate)
 
     def _deposit_pheromones(self, path):
+        pheromone_deposit = 1 / len(path)  # Inversamente proporcional a la longitud
         for position in path:
-            self.pheromones[position[1], position[0]] += 1
+          self.pheromones[position[1], position[0]] += pheromone_deposit
+
 
     def find_best_path(self, num_iterations):
         for _ in range(num_iterations):
-            all_paths = []
-            for _ in range(self.num_ants):
-                current_position = self.start
-                path = [current_position]
-                while current_position != self.end:
-                    next_position = self._select_next_position(current_position, path)
-                    if next_position is None:
-                        break
-                    path.append(next_position)
-                    current_position = next_position
-                all_paths.append(path)
+          all_paths = []
+          for _ in range(self.num_ants):
+            current_position = self.start
+            path = [current_position]
+            while current_position != self.end:
+                next_position = self._select_next_position(current_position, path)
+                if next_position is None:
+                    break
+                path.append(next_position)
+                current_position = next_position
+            all_paths.append(path)
 
-            # Escoger el mejor camino por su tamaño?
-            # --------------------------
+        # Filtrar caminos que llegan al objetivo
+        all_paths = [path for path in all_paths if path[-1] == self.end]
+        if all_paths:  # Asegurar que hay caminos que llegan al objetivo
             all_paths.sort(key=lambda x: len(x))
             best_path = all_paths[0]
 
@@ -100,7 +107,7 @@ def study_case_1():
     end = (4, 7)
     obstacles = [(1, 2), (2, 2), (3, 2)]
     aco = AntColonyOptimization(start, end, obstacles)
-    aco.find_best_path(100)
+    aco.find_best_path(500)
     aco.plot()
     print("End of Ant Colony Optimization")
     print("Best path: ", aco.best_path)
@@ -111,14 +118,11 @@ def study_case_2():
     end = (4, 7)
     obstacles = [(0, 2), (1, 2), (2, 2), (3, 2)]
     aco = AntColonyOptimization(start, end, obstacles)
-    aco.find_best_path(100)
+    aco.find_best_path(200)
     aco.plot()
     print("End of Ant Colony Optimization")
     print("Best path: ", aco.best_path)
 
 if __name__ == '__main__':
-    study_case_1()
-    # study_case_2()
-
-
-
+    #study_case_1()
+    study_case_2()
