@@ -1,11 +1,14 @@
-# WorkShop1-USFQ
-## Taller 1 de inteligencia artificial
+# WorkShop-USFQ
+## Taller 2 de inteligencia artificial
 
 - **Nombre del grupo**: xxxxxx
 - **Integrantes del grupo**:
   * Estudiante 1
   * Estudiante 2
 
-- **Link**: [Planificación en ClickUp](https://app.clickup.com/xxxxxx)
+El objetivo de esta tarea es utilizar cualquier algoritmo de búsqueda para resolver los 3 laberintos propuestos, 
+el reto es poder visualizar/representar los resultados, adicionalmente poder comparar al menos 2 algoritmos de búsqueda 
+y mirar cómo se comportan para cada laberinto.
 
-Este es un ejemplo de commit para revision
+
+![Maze1](/Taller2/images/maze1.jpg) 
