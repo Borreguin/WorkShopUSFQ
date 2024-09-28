@@ -40,7 +40,9 @@ class AntColonyOptimization:
         if not probabilities:
             return None
         probabilities = [(pos, prob / total) for pos, prob in probabilities]
-        selected = np.random.choice(len(probabilities), p=[prob for pos, prob in probabilities])
+        # selected = np.random.choice(len(probabilities), p=[prob for pos, prob in probabilities])
+        # selected the best probability
+        selected = np.argmax([prob for pos, prob in probabilities])
         return probabilities[selected][0]
 
     def _evaporate_pheromones(self):
@@ -72,7 +74,7 @@ class AntColonyOptimization:
             self._evaporate_pheromones()
             self._deposit_pheromones(best_path)
 
-            if self.best_path is None or len(best_path) <= len(self.best_path):
+            if self.best_path is None or len(best_path) <= len(self.best_path) and best_path[-1] == self.end:
                 self.best_path = best_path
             # --------------------------
 
