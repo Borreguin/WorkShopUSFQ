@@ -14,7 +14,7 @@ class MazeLoader:
         self.filename = filename
         self.maze = None
 
-    # Método para cargar el archivo del laberinto línea por línea
+    # Metodo para cargar el archivo del laberinto línea por línea
     def load_Maze(self):
         _maze = []
         file_path = os.path.join(project_path, self.filename)
@@ -25,7 +25,7 @@ class MazeLoader:
         self.maze = _maze # El laberinto se almacena en una lista de listas
         return self
 
-    # Método para visualizar el laberinto
+    # Metodo para visualizar el laberinto
     def plot_maze(self):
         height = len(self.maze)
         width = len(self.maze[0])
@@ -48,7 +48,7 @@ class MazeLoader:
 
         return self
 
-    # Método para construir un grafo a partir del laberinto (donde cada celda transitable (que no sea #) se trata como un nodo
+    # Metodo para construir un grafo a partir del laberinto (donde cada celda transitable (que no sea #) se trata como un nodo
     def get_graph(self):
         # Implementación de la creación del grafo a partir del laberinto
         graph = defaultdict(list)
