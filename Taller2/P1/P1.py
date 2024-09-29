@@ -10,6 +10,7 @@ def study_case_1():
     maze = MazeLoader(maze_file).load_Maze().plot_maze()
     # Aquí la implementación de la solución:
     graph = maze.get_graph()
+    print(maze_file)
 
 
 
