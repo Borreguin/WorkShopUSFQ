@@ -4,7 +4,7 @@ import numpy as np
 import networkx as nx
 project_path = os.path.dirname(__file__)
 sys.path.append(project_path)
-from P1_util import define_color, define_black_space
+from P1_util import define_color, define_black_space, uniform_cost_search, reconstruct_path 
 
 
 class MazeLoader:
@@ -111,7 +111,11 @@ class MazeLoader:
         return G, pos, node_colors_list, nodes_start_end #Retorna el nodo, las posiciones para el grafico, los colores para el grafico y los nodos de incio y fin
     
     
+
     #Función que devuelve el grafo
     def get_solved_ucs_graph(self):
         
         G, pos, node_colors_list, nodes_start_end = self.get_graph()
+        print(nodes_start_end)
+
+

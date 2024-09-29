@@ -9,8 +9,9 @@ def study_case_1():
     maze_file = 'laberinto1.txt'
     maze = MazeLoader(maze_file).load_Maze().plot_maze()
     # Aquí la implementación de la solución:
-    graph = maze.get_graph()
-    print(maze_file)
+    #graph = maze.get_graph()
+    G, pos, node_colors_list, nodes_start_end = maze.get_graph()
+    print(nodes_start_end)
 
 
 
@@ -28,7 +29,7 @@ def study_case_3():
     maze = MazeLoader(maze_file).load_Maze().plot_maze()
     # Aquí la implementación de la solución:
     graph = maze.get_graph()
-3
+
 
 if __name__ == '__main__':
     study_case_1()
