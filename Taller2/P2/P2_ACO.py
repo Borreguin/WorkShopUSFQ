@@ -40,7 +40,7 @@ class AntColonyOptimization:
                 heuristic = 1 / (np.linalg.norm(np.array(neighbor) - np.array(self.end)) + 0.1)
                 probabilities.append((neighbor, pheromone ** self.alpha * heuristic ** self.beta))
                 total += pheromone ** self.alpha * heuristic ** self.beta
-        if not probabilities:
+        if not probabilities or total == 0:
             return None
         probabilities = [(pos, prob / total) for pos, prob in probabilities]
         positions, weights = zip(*probabilities)
