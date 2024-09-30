@@ -19,4 +19,4 @@ y mirar cómo se comportan para cada laberinto.
 
 
 
-![Maze1](/Taller2/images/maze1.jpg) 
+![Maze1](/Taller2/images/L2_astar_animation.gif) 
