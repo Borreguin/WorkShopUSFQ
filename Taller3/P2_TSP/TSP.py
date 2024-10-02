@@ -4,8 +4,8 @@ import sys, os
 current_dir = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(current_dir)
 
-from Taller3.P2_TSP.util import *
-from Taller3.P2_TSP.util_nearest_neighbor import nearest_neighbor
+from util import *
+from util_nearest_neighbor import nearest_neighbor
 
 
 class TSP:
