@@ -1,13 +1,10 @@
-import datetime as dt
-from typing import List
 import pyomo.environ as pyo
 import re
+import sys, os
+current_dir = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(current_dir)
 
-
-
-from Taller3.P2_TSP.util import generar_ciudades_con_distancias, plotear_ruta, get_min_distance, get_max_distance, \
-    get_average_distance, get_average_distance_for_city, delta_time_mm_ss, get_path, calculate_path_distance, \
-    get_min_distances, get_max_distances
+from Taller3.P2_TSP.util import *
 from Taller3.P2_TSP.util_nearest_neighbor import nearest_neighbor
 
 
