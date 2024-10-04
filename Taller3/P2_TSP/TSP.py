@@ -1,3 +1,5 @@
+import matplotlib.pyplot as plt
+import datetime as dt
 import pyomo.environ as pyo
 import re
 import sys, os
@@ -153,22 +155,53 @@ class TSP:
     def plotear_resultado(self, ruta: List[str], mostrar_anotaciones: bool = True):
         plotear_ruta(self.ciudades, self.distancias, ruta, mostrar_anotaciones)
 
-def study_nearest_neighbor(n_cities):
-    ciudades, distancias = generar_ciudades_con_distancias(n_cities)
-    ruta = nearest_neighbor(ciudades, distancias)
-    plotear_ruta(ciudades, distancias, ruta, True)
 
-def study_case_1():
-    # tal vez un loop para probar 10, 20, 30, 40, 50 ciudades?
-    n_cities = 50
-    ciudades, distancias = generar_ciudades_con_distancias(n_cities)
-    heuristics = []
-    mipgap = 0.05
-    time_limit = 30
-    tee = False
-    tsp = TSP(ciudades, distancias, heuristics)
-    ruta = tsp.encontrar_la_ruta_mas_corta(mipgap, time_limit, tee)
-    tsp.plotear_resultado(ruta)
+def study_nearest_neighbor(n_cities):
+  start_time = dt.datetime.now()  # Inicia el tiempo
+  ciudades, distancias = generar_ciudades_con_distancias(n_cities)
+  ruta = nearest_neighbor(ciudades, distancias)
+  execution_time = dt.datetime.now() - start_time  # Calcula el tiempo de ejecución
+  distance = calculate_path_distance(distancias,
+                                     ruta)  # Calcula la distancia total
+  return execution_time.total_seconds(), distance
+
+
+def study_case_1(n_cities):
+  start_time = dt.datetime.now()  # Inicia el tiempo
+  ciudades, distancias = generar_ciudades_con_distancias(n_cities)
+  heuristics = []
+  mipgap = 0.05
+  time_limit = 30
+  tee = False
+  tsp = TSP(ciudades, distancias, heuristics)
+  ruta = tsp.encontrar_la_ruta_mas_corta(mipgap, time_limit, tee)
+  execution_time = dt.datetime.now() - start_time  # Calcula el tiempo de ejecución
+  distance = calculate_path_distance(distancias,
+                                     ruta)  # Calcula la distancia total
+  return execution_time.total_seconds(), distance
+
+def plot_comparison_times(city_sizes, nn_times, case1_times):
+    plt.figure(figsize=(8, 6))
+    plt.plot(city_sizes, nn_times, 'r-o', label='Vecino cercano (Tiempo)')
+    plt.plot(city_sizes, case1_times, 'b-o', label='LP (Tiempo)')
+    plt.xlabel('Número de ciudades')
+    plt.ylabel('Tiempo de resolución (segundos)')
+    plt.title('Comparación de tiempos de resolución')
+    plt.legend()
+    plt.grid(True)
+    plt.show()
+
+
+def plot_comparison_distances(city_sizes, nn_distances, case1_distances):
+  plt.figure(figsize=(8, 6))
+  plt.plot(city_sizes, nn_distances, 'r--o', label='Vecino cercano (Distancia)')
+  plt.plot(city_sizes, case1_distances, 'b--o', label='LP (Distancia)')
+  plt.xlabel('Número de ciudades')
+  plt.ylabel('Distancia total')
+  plt.title('Comparación de distancia total recorrida')
+  plt.legend()
+  plt.grid(True)
+  plt.show()
 
 def study_case_2():
     n_cities = 70
@@ -202,8 +235,28 @@ def study_case_3():
 if __name__ == "__main__":
     print("Se ha colocado un límite de tiempo de 30 segundos para la ejecución del modelo.")
     # as reference, see nearest neighbor heuristic
-    study_nearest_neighbor(100)
-    # Solve the TSP problem
-    # study_case_1()
+    city_sizes = [10, 20, 30, 40, 50]  # Lista con el número de ciudades
+    nn_times = []
+    nn_distances = []
+    case1_times = []
+    case1_distances = []
+
+    # Recorremos la lista de ciudades para ambos estudios
+    for n_cities in city_sizes:
+      print(f"Ejecutando con {n_cities} ciudades...")
+
+      # Estudio de Vecino Cercano
+      nn_time, nn_distance = study_nearest_neighbor(n_cities)
+      nn_times.append(nn_time)
+      nn_distances.append(nn_distance)
+
+      # Estudio de Case 1 (LP)
+      case1_time, case1_distance = study_case_1(n_cities)
+      case1_times.append(case1_time)
+      case1_distances.append(case1_distance)
+
+    # Graficar los resultados
+    plot_comparison_times(city_sizes, nn_times, case1_times)
+    plot_comparison_distances(city_sizes, nn_distances, case1_distances)
     # study_case_2()
-    study_case_3()
+    #study_case_3()
