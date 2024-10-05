@@ -1,5 +1,7 @@
 import matplotlib.pyplot as plt
 import datetime as dt
+
+import numpy as np
 import pyomo.environ as pyo
 import re
 import sys, os
@@ -203,19 +205,41 @@ def plot_comparison_distances(city_sizes, nn_distances, case1_distances):
   plt.grid(True)
   plt.show()
 
-def study_case_2():
-    n_cities = 70
-    ciudades, distancias = generar_ciudades_con_distancias(n_cities)
-    # con heuristicas
-    heuristics = ['limitar_funcion_objetivo']
-    # sin heuristicas
-    # heuristics = []
-    tsp = TSP(ciudades, distancias, heuristics)
-    mipgap = 0.2
-    time_limit = 40
-    tee = True
-    ruta = tsp.encontrar_la_ruta_mas_corta(mipgap, time_limit, tee)
-    tsp.plotear_resultado(ruta, False)
+def study_case_2(con_heuristica=True):
+  n_cities = 70  # Número de ciudades
+  ciudades, distancias = generar_ciudades_con_distancias(n_cities)
+
+  # Si con_heuristica es True, añadimos la heurística de límites
+  heuristics = ['limitar_funcion_objetivo'] if con_heuristica else []
+
+  mipgap = 0.2  # Valor de gap de mip
+  time_limit = 40  # Tiempo límite para la ejecución
+  tee = False
+
+  # Instanciamos el problema TSP con las ciudades, distancias y las heurísticas seleccionadas
+  tsp = TSP(ciudades, distancias, heuristics)
+
+  # Resolvemos el problema
+  ruta = tsp.encontrar_la_ruta_mas_corta(mipgap, time_limit, tee)
+
+  # Verificar si la ruta es válida
+  if ruta is None or len(ruta) == 0:
+    print("La ruta obtenida es inválida.")
+    return None
+
+  # Mostramos el resultado con el gráfico
+  tsp.plotear_resultado(ruta, mostrar_anotaciones=False)
+
+  # Calculamos y retornamos la distancia total
+  distance = calculate_path_distance(distancias, ruta)
+
+  # Verificamos si la distancia se ha calculado correctamente
+  if distance is None:
+    print("Error al calcular la distancia total.")
+  else:
+    print(f"Distancia total: {distance}")
+
+  return distance
 
 def study_case_3():
     n_cities = 100
@@ -232,31 +256,96 @@ def study_case_3():
     tsp.plotear_resultado(ruta, False)
 
 
+def study_case_4():
+  n_cities = 100
+  ciudades, distancias = generar_ciudades_con_distancias(n_cities)
+  mipgap = 0.05
+  time_limit = 60
+  tee = False
+  # con heuristicas
+  heuristics = ['vecino_cercano']
+  tsp = TSP(ciudades, distancias, heuristics)
+  ruta = tsp.encontrar_la_ruta_mas_corta(mipgap, time_limit, tee)
+  tsp.plotear_resultado(ruta, False)
+  # sin heuristicas
+  heuristics = []
+  tsp = TSP(ciudades, distancias, heuristics)
+  ruta = tsp.encontrar_la_ruta_mas_corta(mipgap, time_limit, tee)
+  tsp.plotear_resultado(ruta, False)
+
+def study_case_5():
+    n_cities = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+    ruta_distancias = []
+    mipgap = 0.05
+    time_limit = 60
+    tee = False
+
+    for i in n_cities:
+      ciudades, distancias = generar_ciudades_con_distancias(i)
+      # con heuristicas
+      heuristics = ['vecino_cercano']
+      tsp = TSP(ciudades, distancias, heuristics)
+      ruta_con_heuristica = tsp.encontrar_la_ruta_mas_corta(mipgap, time_limit,
+                                                            tee)
+
+      # sin heuristicas
+      heuristics = ['']
+      tsp = TSP(ciudades, distancias, heuristics)
+      ruta_sin_heuristica = tsp.encontrar_la_ruta_mas_corta(mipgap, time_limit,
+                                                            tee)
+
+      # Guardar resultados
+      ruta_distancias.append(
+          [calculate_path_distance(distancias, ruta_con_heuristica),
+           calculate_path_distance(distancias, ruta_sin_heuristica)])
+    ruta_distancias = np.array(ruta_distancias)
+
+    plt.plot(n_cities, ruta_distancias[:, 0], marker='o')
+    plt.plot(n_cities, ruta_distancias[:, 1], marker='o')
+    plt.xlabel('Número de Ciudades')
+    plt.ylabel('Distancia Mínima')
+    plt.legend(['Con Heuristica', 'Sin Heuristica'])
+    plt.grid()
+    plt.show()
+
+
 if __name__ == "__main__":
-    print("Se ha colocado un límite de tiempo de 30 segundos para la ejecución del modelo.")
-    # as reference, see nearest neighbor heuristic
-    city_sizes = [10, 20, 30, 40, 50]  # Lista con el número de ciudades
-    nn_times = []
-    nn_distances = []
-    case1_times = []
-    case1_distances = []
 
-    # Recorremos la lista de ciudades para ambos estudios
-    for n_cities in city_sizes:
-      print(f"Ejecutando con {n_cities} ciudades...")
 
-      # Estudio de Vecino Cercano
-      nn_time, nn_distance = study_nearest_neighbor(n_cities)
-      nn_times.append(nn_time)
-      nn_distances.append(nn_distance)
+  # Ejecutar caso 1
+  city_sizes = [10, 20, 30, 40, 50]  # Lista con el número de ciudades
+  nn_times = []
+  nn_distances = []
+  case1_times = []
+  case1_distances = []
 
-      # Estudio de Case 1 (LP)
-      case1_time, case1_distance = study_case_1(n_cities)
-      case1_times.append(case1_time)
-      case1_distances.append(case1_distance)
+  # Recorremos la lista de ciudades para ambos estudios
+  for n_cities in city_sizes:
+    print(f"Ejecutando con {n_cities} ciudades...")
 
-    # Graficar los resultados
-    plot_comparison_times(city_sizes, nn_times, case1_times)
-    plot_comparison_distances(city_sizes, nn_distances, case1_distances)
-    # study_case_2()
-    #study_case_3()
+    # Estudio de Vecino Cercano
+    nn_time, nn_distance = study_nearest_neighbor(n_cities)
+    nn_times.append(nn_time)
+    nn_distances.append(nn_distance)
+
+    # Estudio de Case 1 (LP)
+    case1_time, case1_distance = study_case_1(n_cities)
+    case1_times.append(case1_time)
+    case1_distances.append(case1_distance)
+
+  # Graficar los resultados
+  plot_comparison_times(city_sizes, nn_times, case1_times)
+  plot_comparison_distances(city_sizes, nn_distances, case1_distances)
+
+  # Ejecutar caso 2 con y sin heurística
+  print("Ejecución con heurística:")
+  distancia_con_heuristica = study_case_2(con_heuristica=True)
+  print(f"Distancia total con heurística: {distancia_con_heuristica}")
+
+  print("Ejecución sin heurística:")
+  distancia_sin_heuristica = study_case_2(con_heuristica=False)
+  print(f"Distancia total sin heurística: {distancia_sin_heuristica}")
+
+  # Ejecutar caso 3 con y sin heurística
+  study_case_4()
+  study_case_5()
