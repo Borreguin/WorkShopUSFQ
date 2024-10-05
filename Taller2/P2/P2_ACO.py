@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.colors import LinearSegmentedColormap
+np.random.seed(42)
 
 class AntColonyOptimization:
     def __init__(self, start, end, obstacles, grid_size=(10, 10), num_ants=10, evaporation_rate=0.1, alpha=0.1, beta=15):
@@ -13,7 +14,8 @@ class AntColonyOptimization:
         self.alpha = alpha
         self.beta = beta
         self.pheromones = np.ones(grid_size)
-        self.best_path = None
+        self.best_ant_path = None       # best path that an ant could find while the iterations occurs
+        self.best_path = None           # best path based on pheromones after all iterations
 
     def _get_neighbors(self, position):
         pos_x, pos_y = position
@@ -28,6 +30,8 @@ class AntColonyOptimization:
 
     def _select_next_position(self, position, visited):
         neighbors = self._get_neighbors(position)
+        if len(neighbors) == 0:
+            return None
         probabilities = []
         total = 0
         for neighbor in neighbors:
@@ -36,20 +40,25 @@ class AntColonyOptimization:
                 heuristic = 1 / (np.linalg.norm(np.array(neighbor) - np.array(self.end)) + 0.1)
                 probabilities.append((neighbor, pheromone ** self.alpha * heuristic ** self.beta))
                 total += pheromone ** self.alpha * heuristic ** self.beta
-        if not probabilities:
+        if not probabilities or total == 0:
             return None
         probabilities = [(pos, prob / total) for pos, prob in probabilities]
-        selected = np.random.choice(len(probabilities), p=[prob for pos, prob in probabilities])
-        return probabilities[selected][0]
+        positions, weights = zip(*probabilities)
+        selected_index = np.random.choice(len(positions), p=weights)
+        return probabilities[selected_index][0]
 
     def _evaporate_pheromones(self):
         self.pheromones *= (1 - self.evaporation_rate)
 
     def _deposit_pheromones(self, path):
+        pheromone_deposit = 1 / len(path)  # Deposit inversely proportional to path length
         for position in path:
-            self.pheromones[position[1], position[0]] += 1
+            self.pheromones[position[1], position[0]] += pheromone_deposit
 
     def find_best_path(self, num_iterations):
+        self.find_best_ant_path(num_iterations)
+        self.find_best_path_based_on_pheromones()
+    def find_best_ant_path(self, num_iterations):
         for _ in range(num_iterations):
             all_paths = []
             for _ in range(self.num_ants):
@@ -70,10 +79,32 @@ class AntColonyOptimization:
 
             self._evaporate_pheromones()
             self._deposit_pheromones(best_path)
-
-            if self.best_path is None or len(best_path) <= len(self.best_path):
-                self.best_path = best_path
+            # Here we need to guarantee that the end arrived to the end
+            # best_path[-1] == self.end
+            if self.best_ant_path is None or len(best_path) <= len(self.best_ant_path) and best_path[-1] == self.end:
+                self.best_ant_path = best_path
             # --------------------------
+
+    def find_best_path_based_on_pheromones(self):
+        self.best_path = [self.start]
+        # use the pheromones to find the best path (self.pheromones)
+        current_position = self.start
+        while current_position != self.end:
+            # use self.pheromones
+            next_position = self.get_next_position_based_on_pheromones(self._get_neighbors(current_position))
+            if next_position is None:
+                break
+            current_position = next_position
+            self.best_path.append(current_position)
+    def get_next_position_based_on_pheromones(self, neighbors):
+        # use self.pheromones
+        best_neighbor = None
+        for position in neighbors:
+            if position in self.best_path:
+                continue
+            if best_neighbor is None or self.pheromones[position[1], position[0]] > self.pheromones[best_neighbor[1], best_neighbor[0]]:
+                best_neighbor = position
+        return best_neighbor
 
     def plot(self):
         cmap = LinearSegmentedColormap.from_list('pheromone', ['white', 'green', 'red'])
@@ -84,9 +115,12 @@ class AntColonyOptimization:
         plt.scatter(self.end[0], self.end[1], color='magenta', label='End', s=100)
         for obstacle in self.obstacles:
             plt.scatter(obstacle[0], obstacle[1], color='gray', s=900, marker='s')
+        if self.best_ant_path:
+            path_x, path_y = zip(*self.best_ant_path)
+            plt.plot(path_x, path_y, color='blue', label='Last Ant Path', linewidth=3)
         if self.best_path:
             path_x, path_y = zip(*self.best_path)
-            plt.plot(path_x, path_y, color='blue', label='Best Path', linewidth=3)
+            plt.plot(path_x, path_y, color='red', label='Best Pheromone Path', linewidth=3)
         plt.xlabel('Column')
         plt.ylabel('Row')
         plt.title('Ant Colony Optimization')
@@ -103,7 +137,7 @@ def study_case_1():
     aco.find_best_path(100)
     aco.plot()
     print("End of Ant Colony Optimization")
-    print("Best path: ", aco.best_path)
+    print("Best path: ", aco.best_ant_path)
 
 def study_case_2():
     print("Start of Ant Colony Optimization - Second Study Case")
@@ -114,11 +148,11 @@ def study_case_2():
     aco.find_best_path(100)
     aco.plot()
     print("End of Ant Colony Optimization")
-    print("Best path: ", aco.best_path)
+    print("Best path: ", aco.best_ant_path)
 
 if __name__ == '__main__':
-    study_case_1()
-    # study_case_2()
+    # study_case_1()
+    study_case_2()
 
 
 
