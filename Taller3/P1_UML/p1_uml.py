@@ -1,6 +1,7 @@
 import os
-from Taller3.P1_UML.p1_uml_util import *
-
+from p1_uml_util import *
+import seaborn as sns
+import matplotlib.pyplot as plt
 
 def prepare_data():
     script_path = os.path.dirname(os.path.abspath(__file__))
@@ -22,8 +23,31 @@ def plot_data(_df: pd.DataFrame, lb1, lb2, legend):
     plt.show()
 
 
+def plot_boxplot_data(_df, var_to_group):
+    _df['just_time_stamp'] = _df.index
+    _df['just_time_stamp'] = pd.to_datetime(_df['just_time_stamp']).dt.time
+
+    sns.boxplot(x='just_time_stamp', y=var_to_group, data=df)
+    plt.title('Boxplot de ' + var_to_group + ' por hora del día')
+    plt.xticks(rotation=90)
+    plt.grid(True)
+    
+    #plt.close()
+
 
 if __name__ == "__main__":
+
     df = prepare_data()
-    plot_data(df, lb_V005_vent01_CO2, lb_V022_vent02_CO2, "CO2")
-    plot_data(df, lb_V006_vent01_temp_out, lb_V023_vent02_temp_out, "Temperature")
+    plot_boxplot_data(df,'V005_vent01_CO2')
+    plot_boxplot_data(df,'V022_vent02_CO2')
+    plt.show()
+    plt.close()
+    plot_boxplot_data(df,'V006_vent01_temp_out')
+    plot_boxplot_data(df,'V023_vent02_temp_out')
+    plt.show()
+    plt.close()
+
+    #plot_data(df, lb_V005_vent01_CO2, lb_V022_vent02_CO2, "CO2")
+    #plot_data(df, lb_V006_vent01_temp_out, lb_V023_vent02_temp_out, "Temperature")
+
+    
