@@ -25,15 +25,6 @@ def prepare_data():
     _df.set_index('timestamp', inplace=True)
     return _df
 
-def plot_data(_df: pd.DataFrame, lb1, lb2, legend):
-    df_to_plot = _df.tail(1000)
-    plt.plot(df_to_plot.index, df_to_plot[lb1], label=alias[lb_V005_vent01_CO2])
-    plt.plot(df_to_plot.index, df_to_plot[lb2], label=alias[lb_V022_vent02_CO2])
-    plt.xlabel(lb_timestamp)
-    plt.ylabel(legend)
-    plt.legend()
-    plt.show()
-
 def all_registers(_df: pd.DataFrame):
   # Agrupar por día manteniendo solo los días con 24 registros
   daily_grouped = _df.groupby(_df.index.date).filter(lambda x: len(x) == 24)
