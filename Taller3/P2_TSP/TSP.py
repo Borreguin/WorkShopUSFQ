@@ -310,8 +310,6 @@ def study_case_5():
 
 
 if __name__ == "__main__":
-
-
   # Ejecutar caso 1
   city_sizes = [10, 20, 30, 40, 50]  # Lista con el número de ciudades
   nn_times = []
