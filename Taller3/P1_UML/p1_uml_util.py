@@ -21,3 +21,30 @@ def read_csv_file(file_path: str) -> pd.DataFrame:
         print(f"Error reading file: {file_path}")
         print(e)
         return pd.DataFrame()
+    
+def elegant_print(message,num_sep):
+
+    print("="*num_sep)
+    print(message)
+    print("-"*num_sep)
+
+def generarte_only_timestamp(_df):
+
+    _df['just_time_stamp'] = _df.index
+    _df['just_time_stamp'] = pd.to_datetime(_df['just_time_stamp'],dayfirst=True).dt.time
+
+    return _df
+
+
+def expand_timestamp(_df,timestamp_column):
+
+    _df[timestamp_column] = pd.to_datetime(_df[timestamp_column],dayfirst=True,errors='coerce')
+    # Extraer características
+    _df['year'] = _df[timestamp_column].dt.year
+    _df['month'] = _df[timestamp_column].dt.month
+    _df['day'] = _df[timestamp_column].dt.day
+    _df['day_of_week'] = _df[timestamp_column].dt.dayofweek  # 0 = Lunes, 6 = Domingo
+    #_df['is_weekend'] = (_df[timestamp_column] >= 5).astype(int)  # 1 si es fin de semana, 0 si no
+    _df['hour'] = _df[timestamp_column].dt.hour
+
+    return _df
