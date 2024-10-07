@@ -3,7 +3,7 @@ import re
 import sys, os
 current_dir = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(current_dir)
-
+import numpy as np
 from util import *
 from util_nearest_neighbor import nearest_neighbor
 
@@ -170,13 +170,13 @@ def study_case_1():
     ruta = tsp.encontrar_la_ruta_mas_corta(mipgap, time_limit, tee)
     tsp.plotear_resultado(ruta)
 
-def study_case_2():
-    n_cities = 70
+def study_case_2(n_cities=70):
+    # n_cities = 70
     ciudades, distancias = generar_ciudades_con_distancias(n_cities)
     # con heuristicas
-    heuristics = ['limitar_funcion_objetivo']
+    # heuristics = ['limitar_funcion_objetivo']
     # sin heuristicas
-    # heuristics = []
+    heuristics = []
     tsp = TSP(ciudades, distancias, heuristics)
     mipgap = 0.2
     time_limit = 40
@@ -198,12 +198,122 @@ def study_case_3():
     ruta = tsp.encontrar_la_ruta_mas_corta(mipgap, time_limit, tee)
     tsp.plotear_resultado(ruta, False)
 
+def run_nearest_neighbor_for_various_city_sizes(city_sizes):
+    results = []
+    for n_cities in city_sizes:
+        print(f"\n--- Ejecutando Vecino Cercano para {n_cities} ciudades ---")
+        ciudades, distancias = generar_ciudades_con_distancias(n_cities)
+        ruta = nearest_neighbor(ciudades, distancias)
+        plotear_ruta(ciudades, distancias, ruta, mostrar_anotaciones=False)
+        results.append({
+            "n_cities": n_cities,
+            "ruta": ruta
+        })
+
+    return results
+
+def run_tsp_for_various_city_sizes(city_sizes):
+    mipgap = 0.05
+    time_limit = 30
+    tee = True
+    results = []
+
+    for n_cities in city_sizes:
+        print(f"\n--- Ejecutando TSP para {n_cities} ciudades ---")
+        ciudades, distancias = generar_ciudades_con_distancias(n_cities)
+        heuristics = []  # Sin heurísticas para este análisis
+        tsp = TSP(ciudades, distancias, heuristics)
+        ruta = tsp.encontrar_la_ruta_mas_corta(mipgap, time_limit, tee)
+        tsp.plotear_resultado(ruta, mostrar_anotaciones=False)
+        results.append({
+            "n_cities": n_cities,
+            "ruta": ruta
+        })
+
+    return results
+
+def study_case_tee(n_cities, mipgap=0.05, time_limit=30):
+    """
+    Ejecuta el TSP para un número específico de ciudades, con los parámetros dados, y habilita la salida en consola.
+
+    Args:
+    - n_cities (int): Número de ciudades en el problema TSP.
+    - mipgap (float): Máxima brecha aceptable para el valor óptimo.
+    - time_limit (int): Tiempo límite para la ejecución del solver en segundos.
+    """
+    # Generar las ciudades y sus distancias
+    ciudades, distancias = generar_ciudades_con_distancias(n_cities)
+    
+    # Parámetros de la heurística (se deja sin heurísticas)
+    heuristics = []  # Puedes añadir heurísticas si es necesario
+    
+    # Activar tee para ver la salida del solver en la consola
+    tee = True
+
+    # Crear la instancia del TSP y resolver el problema
+    tsp = TSP(ciudades, distancias, heuristics)
+    print(f"\n--- Ejecutando TSP para {n_cities} ciudades con tee activado ---")
+    ruta = tsp.encontrar_la_ruta_mas_corta(mipgap, time_limit, tee)
+
+    # Ploteo del resultado
+    tsp.plotear_resultado(ruta, mostrar_anotaciones=False)
+
+def study_case_2_heuristic(n_cities=70, mipgap=0.2, time_limit=40, use_heuristic=True):
+    """
+    Ejecuta el caso 2 con 70 ciudades, con opción de aplicar una heurística de límites a la función objetivo.
+
+    Args:
+    - n_cities (int): Número de ciudades (por defecto 70).
+    - mipgap (float): Máxima brecha aceptable para el valor óptimo.
+    - time_limit (int): Tiempo límite para la ejecución del solver en segundos.
+    - use_heuristic (bool): Si True, aplica la heurística de límite en la función objetivo.
+    """
+    # Generar las ciudades y sus distancias
+    ciudades, distancias = generar_ciudades_con_distancias(n_cities)
+
+    # Parámetros de heurística
+    heuristics = []
+    if use_heuristic:
+        heuristics = ['limitar_funcion_objetivo']  # Aplicar la heurística de límites
+
+    # Activar tee para ver la salida del solver en la consola
+    tee = True
+
+    # Crear la instancia del TSP y resolver el problema
+    tsp = TSP(ciudades, distancias, heuristics)
+    if use_heuristic:
+        print(f"\n--- Ejecutando TSP para {n_cities} ciudades con heurística de límites activada ---")
+    else:
+        print(f"\n--- Ejecutando TSP para {n_cities} ciudades sin heurística ---")
+
+    ruta = tsp.encontrar_la_ruta_mas_corta(mipgap, time_limit, tee)
+
+    # Ploteo del resultado
+    tsp.plotear_resultado(ruta, mostrar_anotaciones=False)
+
+def study_case_3_nearest_neighbor(n_cities: int, mipgap: float = 0.2, time_limit: int = 60, use_heuristic: bool = True):
+    # Generar ciudades y distancias entre ellas
+    ciudades, distancias = generar_ciudades_con_distancias(n_cities)
+    
+    # Determinar si se aplica la heurística
+    heuristics = ['vecino_cercano'] if use_heuristic else []
+    
+    tsp = TSP(ciudades, distancias, heuristics)
+    ruta = tsp.encontrar_la_ruta_mas_corta(mipgap, time_limit, tee=True)
+    tsp.plotear_resultado(ruta, mostrar_anotaciones=True)
+
 
 if __name__ == "__main__":
     print("Se ha colocado un límite de tiempo de 30 segundos para la ejecución del modelo.")
     # as reference, see nearest neighbor heuristic
-    study_nearest_neighbor(100)
+    # study_nearest_neighbor(100)
     # Solve the TSP problem
     # study_case_1()
-    # study_case_2()
-    study_case_3()
+    # study_case_2(10)
+    #study_case_3()
+    # city_sizes = [10, 20, 30, 40, 50]
+    # # run_tsp_for_various_city_sizes(city_sizes)
+    # run_nearest_neighbor_for_various_city_sizes(city_sizes)
+    # study_case_2_heuristic(n_cities=70, mipgap=0.2, time_limit=40, use_heuristic=False)
+    study_case_3_nearest_neighbor(n_cities=100, mipgap=0.2, time_limit=60, use_heuristic=False)
+
