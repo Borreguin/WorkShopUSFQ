@@ -26,3 +26,5 @@ La sección 2, correspondiente al algoritmo ACO, se resuelve utilizando un ipynb
 ## Taller 3: 
 
 Enfocado en algoritmos supervisados y no supervisados.
+
+Se destaca que para el ejercicio 1, su análisis esta dividido en 2. Uno sobre los propios .py originales y otra parte sobre archivo ipynb.
