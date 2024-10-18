@@ -6,6 +6,7 @@ all_possible_gens = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !"
 class AptitudeType(str, Enum):
     DEFAULT = 'default'
     BY_DISTANCE = 'by_distance'
+    BY_DISTANCE_LEVENSHTEIN = 'by_distance_levenshtein'
     NEW = 'new'
 
 
