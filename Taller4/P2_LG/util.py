@@ -15,7 +15,7 @@ normalized_file = os.path.join(os.path.dirname(__file__),  'data', 'normalized_d
 def load_iris_data():
     iris = load_iris()
     # we choose three features to predict one feature (Petal Length)
-    x = iris.data[:, [0, 1, 3]]  # Sepal Length, Sepal Width, Petal Width
+    x = iris.data[:, [0,1,3]]  # Sepal Length, Sepal Width, Petal Width
     # we assume that we want to predict the petal length
     y = iris.data[:, 2]  # Petal Length
     return x, y
