@@ -48,6 +48,7 @@ def select_best_individual(_type: BestIndividualSelectionType, population, aptit
         print("implement here the new best individual selection")
         return None, None
 
+# def generate_new_population(_type: NewGenerationType, population, aptitudes, mutation_rate):
 def generate_new_population(_type: NewGenerationType, population, aptitudes, mutation_rate, objective):
     if _type == NewGenerationType.DEFAULT:
         new_population = []
@@ -78,7 +79,7 @@ def generate_new_population(_type: NewGenerationType, population, aptitudes, mut
 
            # MUTACIÓN LOCALIZADA (MAYOR EFICIENCIA) definida en el archivo operation.py
             child1 = mutacion_localizada(child1, mutation_rate, objective)
-            child2 = mutacion_localizada(child2, mutation_rate, objective) 
+            child2 = mutacion_localizada(child2, mutation_rate, objective)
             new_population.extend([child1, child2])
         return new_population
 

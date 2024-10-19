@@ -9,7 +9,11 @@ def word_to_array(word: str):
 def distance(list1:List[int], list2:List[int]):
     acc = 0
     for e1, e2 in zip(list1, list2):
-        acc += (e1 - e2)
+        # acc += (e1 - e2)
+
+        # Se cambia la forma de calcular la distancia
+        acc += abs(e1 - e2)
+
     n_size = min(len(list1), len(list2))
     if n_size == 0:
         return None
