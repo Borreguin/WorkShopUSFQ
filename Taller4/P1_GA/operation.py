@@ -1,7 +1,8 @@
 import random
-from Taller4.P1_GA.constants import *
-from Taller4.P1_GA.util import *
+from constants import *
+from util import *
 
+random.seed(123)
 
 def parent_selection(_type: ParentSelectionType, population, aptitudes):
     if _type == ParentSelectionType.DEFAULT:
@@ -9,6 +10,7 @@ def parent_selection(_type: ParentSelectionType, population, aptitudes):
         cumulative = sum(aptitudes)
         selection_probability = [aptitude / cumulative for aptitude in aptitudes]
         parents = random.choices(population, weights=selection_probability, k=2)
+        
         return parents
     if _type == ParentSelectionType.MIN_DISTANCE:
         # seleccionando randomicamente dos poblaciones diferentes para cada padre
@@ -16,6 +18,22 @@ def parent_selection(_type: ParentSelectionType, population, aptitudes):
         partition_size = random.randint(1, len(population)-1)
         parent1 = choose_best_individual_by_distance(population[:partition_size], aptitudes[:partition_size])
         parent2 = choose_best_individual_by_distance(population[partition_size:], aptitudes[partition_size:])
+        return parent1, parent2
+    
+    if _type == ParentSelectionType.TOURNAMENT:
+        # Selección de padres por torneo
+        def tournament_selection(population, aptitudes, tournament_size=3):
+            # Elige 'tournament_size' individuos al azar
+            selected_indices = random.sample(range(len(population)), tournament_size)
+            # Selecciona el individuo con mayor aptitud
+            best_index = max(selected_indices, key=lambda i: aptitudes[i])
+            return population[best_index]
+
+        parent1 = tournament_selection(population, aptitudes)
+        parent2 = tournament_selection(population, aptitudes)
+
+        
+
         return parent1, parent2
 
     if _type == ParentSelectionType.NEW:
