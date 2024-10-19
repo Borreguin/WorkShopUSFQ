@@ -55,7 +55,7 @@ def case_study_1(_objetive):
 
 def case_study_2(_objetive):
     population = generate_population(100, len(_objetive))
-    mutation_rate = 0.01
+    mutation_rate = 0.02
     n_iterations = 1000
     ga = GA(population, _objetive, mutation_rate, n_iterations)
     ga.set_evaluation_type(AptitudeType.BY_DISTANCE)
@@ -67,4 +67,4 @@ def case_study_2(_objetive):
 if __name__ == "__main__":
     objective = "GA Workshop! USFQ"
     case_study_1(objective)
-    # case_study_2(objetive)
+    #case_study_2(objective)
