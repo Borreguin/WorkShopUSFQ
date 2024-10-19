@@ -1,7 +1,7 @@
 from random import choice
 
-from Taller4.P1_GA.operation import *
-from Taller4.P1_GA.util import word_distance
+from operation import *
+from util import word_distance
 
 
 # Generar población
@@ -27,6 +27,9 @@ def evaluate_aptitude(evaluation_type, individual, objetive):
     if evaluation_type == AptitudeType.BY_DISTANCE:
         return word_distance(individual, objetive)
 
+    if evaluation_type == AptitudeType.BY_DISTANCE_LEVENSHTEIN:
+        return word_distance_2(individual, objetive)    
+
     if evaluation_type == AptitudeType.NEW:
         print("implement here the new evaluation")
         return 0
@@ -45,7 +48,8 @@ def select_best_individual(_type: BestIndividualSelectionType, population, aptit
         print("implement here the new best individual selection")
         return None, None
 
-def generate_new_population(_type: NewGenerationType, population, aptitudes, mutation_rate):
+# def generate_new_population(_type: NewGenerationType, population, aptitudes, mutation_rate):
+def generate_new_population(_type: NewGenerationType, population, aptitudes, mutation_rate, objective):
     if _type == NewGenerationType.DEFAULT:
         new_population = []
         # se generara 2 hijos con cada par de padres, se interactúa con la mitad de poplación para mantener el mismo
@@ -53,8 +57,14 @@ def generate_new_population(_type: NewGenerationType, population, aptitudes, mut
         for _ in range(len(population) // 2):
             parent1, parent2 = parent_selection(ParentSelectionType.DEFAULT, population, aptitudes)
             child1, child2 = crossover(CrossoverType.DEFAULT, parent1, parent2)
-            child1 = mutate(MutationType.DEFAULT, child1, mutation_rate)
-            child2 = mutate(MutationType.DEFAULT, child2, mutation_rate)
+
+            # Mutación inicial definida en el archivo operation.py
+            # child1 = mutate(MutationType.DEFAULT, child1, mutation_rate)
+            # child2 = mutate(MutationType.DEFAULT, child2, mutation_rate)
+
+            # MUTACIÓN LOCALIZADA (MAYOR EFICIENCIA) definida en el archivo operation.py
+            child1 = mutacion_localizada(child1, mutation_rate, objective)
+            child2 = mutacion_localizada(child2, mutation_rate, objective)
             new_population.extend([child1, child2])
         return new_population
     if _type == NewGenerationType.MIN_DISTANCE:
@@ -62,8 +72,14 @@ def generate_new_population(_type: NewGenerationType, population, aptitudes, mut
         for _ in range(len(population)//2):
             parent1, parent2 = parent_selection(ParentSelectionType.MIN_DISTANCE, population, aptitudes)
             child1, child2 = crossover(CrossoverType.DEFAULT, parent1, parent2)
-            child1 = mutate(MutationType.DEFAULT, child1, mutation_rate)
-            child2 = mutate(MutationType.DEFAULT, child2, mutation_rate)
+
+            # Mutación inicial definida en el archivo operation.py
+            # child1 = mutate(MutationType.DEFAULT, child1, mutation_rate)
+            # child2 = mutate(MutationType.DEFAULT, child2, mutation_rate)
+
+           # MUTACIÓN LOCALIZADA (MAYOR EFICIENCIA) definida en el archivo operation.py
+            child1 = mutacion_localizada(child1, mutation_rate, objective)
+            child2 = mutacion_localizada(child2, mutation_rate, objective)
             new_population.extend([child1, child2])
         return new_population
 

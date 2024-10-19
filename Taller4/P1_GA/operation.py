@@ -1,6 +1,6 @@
 import random
-from Taller4.P1_GA.constants import *
-from Taller4.P1_GA.util import *
+from constants import *
+from util import *
 
 
 def parent_selection(_type: ParentSelectionType, population, aptitudes):
@@ -45,3 +45,15 @@ def mutate(_type: MutationType, individual, mutation_rate):
     if _type == MutationType.NEW:
         print("implement here the new mutation")
         return None
+
+# SE DEFINE UNA NUEVA FUNCION PARA IMPLEMENTAR MUTACION LOCALIZADA COMO MEJORA PARA ACELERAR LA CONVERGENCIA (NUMERAL 4)
+def mutacion_localizada(individual, mutation_rate, objective):
+    mutated = []
+    for i in range(len(individual)):
+        if individual[i] != objective[i] and random.random() < mutation_rate:
+            # La mutación ocurre SOLO cuando el carácter no es el correcto
+            mutated.append(random.choice(all_possible_gens))  # Gen aleatorio
+        else:
+            # Si el carácter es correcto NO hay mutación
+            mutated.append(individual[i])  
+    return ''.join(mutated)
