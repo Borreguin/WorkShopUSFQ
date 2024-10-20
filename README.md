@@ -20,3 +20,7 @@ Aquí se listan los talleres realizados en la materia de inteligencia artificial
 - [Taller 3](/Taller3/README.md)
   - P1: Uso de Unsupservised Learning para clasificar datos.
   - P2: Uso de Linear Programming para resolver problemas de optimización (TSP).
+  
+- [Taller 4](/Taller4/README.md)
+  - P1: Se realizaron cambios en los archivos existentes.
+  - P2: Se desarrolló el ejercicio en el archivo parte2.ipynb.
