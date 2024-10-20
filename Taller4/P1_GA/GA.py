@@ -1,4 +1,4 @@
-from Taller4.P1_GA.generalSteps import *
+from generalSteps import *
 
 
 class GA:
@@ -63,8 +63,35 @@ def case_study_2(_objetive):
     ga.set_new_generation_type(NewGenerationType.MIN_DISTANCE)
     ga.run()
 
+def case_study_3(_objetive):
+
+    population = generate_population(100, len(_objetive))
+    mutation_rate = 0.1
+    n_iterations = 1000
+    ga = GA(population, _objetive, mutation_rate, n_iterations)
+    ga.set_evaluation_type(AptitudeType.BY_DISTANCE)
+    ga.set_best_individual_selection_type(BestIndividualSelectionType.MIN_DISTANCE)
+    ga.set_new_generation_type(NewGenerationType.MIN_DISTANCE)
+    ga.run()
+
 
 if __name__ == "__main__":
     objective = "GA Workshop! USFQ"
-    case_study_1(objective)
-    # case_study_2(objetive)
+
+    case_study = int(input("Ingrese el número del caso de estudio: "))
+
+    if case_study == 1:
+        elegant_print("Ejecutando caso de estudio " + str(case_study),150)
+        case_study_1(objective)
+    elif case_study == 2:
+        elegant_print("Ejecutando caso de estudio " + str(case_study),150)
+        case_study_2(objective)
+    elif case_study == 3:
+        elegant_print("Ejecutando caso de estudio " + str(case_study),150)
+        case_study_3(objective)
+    elif case_study == 4:
+        elegant_print("Ejecutando caso de estudio " + str(case_study),150)
+        #case_study_4(objective)
+    elif case_study == 5:
+        elegant_print("Ejecutando caso de estudio " + str(case_study),150)
+        #case_study_5(objective)
