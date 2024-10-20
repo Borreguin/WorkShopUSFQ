@@ -1,10 +1,11 @@
 # WorkShop-USFQ
 ## Talleres de inteligencia artificial
 
-- **Nombre del grupo**: xxxxxx
+- **Nombre del grupo**: 2
 - **Integrantes del grupo**:
-  * Estudiante 1
-  * Estudiante 2
+  * Estefi Batallas
+  * Guillermo Celi
+  * Francois Fernandez
 
 Aquí se listan los talleres realizados en la materia de inteligencia artificial:
 - [Taller 1](/Taller1/README.md)
