@@ -9,7 +9,7 @@ def predict(x, weights):
     return np.dot(x, weights)
 
 # Gradient function
-def gradient_descent(x, y, learning_rate=0.01, iterations=1000, seed=123):
+def gradient_descent(x, y, learning_rate = 0.01, iterations = 1000, seed = 123):
     np.random.seed(seed)
     # initialize weights
     # case of study 1
@@ -19,7 +19,7 @@ def gradient_descent(x, y, learning_rate=0.01, iterations=1000, seed=123):
 
     m = len(y)
     # just to save history of the loss function
-    history = dict(cost= [], weights= [])
+    history = dict(cost = [], weights = [])
     for _ in range(iterations):
         # calculate the gradient
         gradients = np.dot(x.T, (np.dot(x, weights) - y)) / m

@@ -1,6 +1,6 @@
 from sklearn.metrics import mean_squared_error
-from Taller4.P2_LG.util import *
-from Taller4.P2_LG.utilLinealRegression import gradient_descent, predict
+from util import *
+from utilLinealRegression import gradient_descent, predict
 
 
 def load_normalized_data_set():
