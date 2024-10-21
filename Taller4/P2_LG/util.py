@@ -19,6 +19,19 @@ def load_iris_data():
     # we assume that we want to predict the petal length
     y = iris.data[:, 2]  # Petal Length
     return x, y
+def load_iris_data2():
+    iris = load_iris()
+    # Usamos las mismas características (longitud de sépalo, ancho de sépalo, ancho de pétalo), pero cambiamos la variable objetivo
+    x = iris.data[:, [0, 1, 3]]  # Longitud del sépalo, ancho del sépalo, ancho del pétalo
+    y = iris.data[:, 1]  # Ancho del sépalo como nueva variable objetivo
+    return x, y
+
+def load_iris_data3():
+    iris = load_iris()
+    # Usar solo dos características: longitud del sépalo y ancho del pétalo
+    x = iris.data[:, [0, 3]]  # Longitud del sépalo, ancho del pétalo
+    y = iris.data[:, 1]  # Ancho del sépalo como variable objetivo
+    return x, y
 
 def load_and_save_normalized_data_set():
     x, y = load_iris_data()
